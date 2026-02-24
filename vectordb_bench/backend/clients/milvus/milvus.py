@@ -5,7 +5,8 @@ import time
 from collections.abc import Iterable
 from contextlib import contextmanager
 
-from pymilvus import Collection, CollectionSchema, DataType, FieldSchema, MilvusException, utility
+from pymilvus import (Collection, CollectionSchema, DataType, FieldSchema,
+                      MilvusException, utility)
 
 from vectordb_bench.backend.filter import Filter, FilterOp
 
@@ -92,6 +93,10 @@ class Milvus(VectorDB):
             )
 
             self.create_index()
+            col.load(replica_number=self.db_config.get("replica_number", 1))
+        else:
+            log.info(f"{self.name} collection {self.collection_name} already exists, ensuring it is loaded")
+            col = Collection(self.collection_name)
             col.load(replica_number=self.db_config.get("replica_number", 1))
 
         connections.disconnect("default")
