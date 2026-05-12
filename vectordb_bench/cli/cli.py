@@ -159,7 +159,7 @@ def check_custom_case_parameters(ctx: any, param: any, value: any):  # noqa: ARG
 --custom-dataset-sizes
 --custom-dataset-dim
 --custom-dataset-file-count
-are required """,
+are required """,  # --custom-dataset-train-name is optional (defaults to "train")
         )
     return value
 
@@ -179,6 +179,7 @@ def get_custom_case_config(parameters: dict) -> dict:
                 "dim": parameters["custom_dataset_dim"],
                 "metric_type": parameters["custom_dataset_metric_type"],
                 "file_count": parameters["custom_dataset_file_count"],
+                "train_name": parameters["custom_dataset_train_name"],
                 "use_shuffled": parameters["custom_dataset_use_shuffled"],
                 "with_gt": parameters["custom_dataset_with_gt"],
             },
@@ -405,6 +406,16 @@ class CommonTypedDict(TypedDict):
             "--custom-dataset-file-count",
             help="Custom dataset file count",
             callback=check_custom_case_parameters,
+        ),
+    ]
+    custom_dataset_train_name: Annotated[
+        str,
+        click.option(
+            "--custom-dataset-train-name",
+            help="Custom dataset train file name prefix(es), comma-separated for multi-shard "
+                 "(e.g. 'train' or 'train-00-of-10, train-01-of-10, ...')",
+            default="train",
+            show_default=True,
         ),
     ]
     custom_dataset_use_shuffled: Annotated[
