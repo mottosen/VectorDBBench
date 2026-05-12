@@ -276,7 +276,9 @@ class SerialSearchRunner:
                         f"latest_latency={latencies[-1]}, latest recall={recalls[-1]}"
                     )
 
-        avg_latency = round(np.mean(latencies), 4)
+        mean_latency = round(np.mean(latencies), 4)
+        median_latency = round(np.median(latencies), 4)
+        stderr_latency = round(float(np.std(latencies) / np.sqrt(len(latencies))), 6)
         avg_recall = round(np.mean(recalls), 4)
         avg_ndcg = round(np.mean(ndcgs), 4)
         cost = round(np.sum(latencies), 4)
@@ -288,11 +290,13 @@ class SerialSearchRunner:
             f"queries={len(latencies)}, "
             f"avg_recall={avg_recall}, "
             f"avg_ndcg={avg_ndcg}, "
-            f"avg_latency={avg_latency}, "
+            f"mean_latency={mean_latency}, "
+            f"median_latency={median_latency}, "
             f"p99={p99}, "
-            f"p95={p95}"
+            f"p95={p95}, "
+            f"stderr={stderr_latency}"
         )
-        return (avg_recall, avg_ndcg, p99, p95)
+        return (avg_recall, avg_ndcg, p99, p95, mean_latency, median_latency, stderr_latency)
 
     def _run_in_subprocess(self) -> tuple[float, float, float, float]:
         with concurrent.futures.ProcessPoolExecutor(max_workers=1) as executor:
@@ -313,7 +317,7 @@ class SerialSearchRunner:
         """
         Search all test data in serial.
         Returns:
-            tuple[tuple[float, float, float, float], float]: (avg_recall, avg_ndcg, p99_latency, p95_latency), cost
+            tuple[tuple[float, float, float, float, float, float], float]: (avg_recall, avg_ndcg, p99_latency, p95_latency, mean_latency, median_latency), cost
         """
         log.info(f"{mp.current_process().name:14} start serial search")
         if self.test_data is None:

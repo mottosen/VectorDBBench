@@ -22,6 +22,9 @@ class Metric:
     qps: float = 0.0
     serial_latency_p99: float = 0.0
     serial_latency_p95: float = 0.0
+    serial_latency_mean: float = 0.0
+    serial_latency_median: float = 0.0
+    serial_latency_stderr: float = 0.0  # std error of per-query latencies within the run
     recall: float = 0.0
     ndcg: float = 0.0
     conc_num_list: list[int] = field(default_factory=list)
