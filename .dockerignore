@@ -1,0 +1,18 @@
+# Build-only hint (not committed — covered by this submodule's .gitignore).
+# Keeps the ~1.1 GB .venv and other heavy/irrelevant paths out of the Docker
+# build context sent to the daemon. The Dockerfile (setup/vectordbbench/Dockerfile)
+# only COPYs pyproject.toml, README.md and vectordb_bench/.
+.venv/
+.git
+*.egg-info/
+tests/
+install/
+dist/
+build/
+**/__pycache__/
+vectordb_bench/results/
+vectordb_bench/logs/
+.data/
+*.sw[op]
+.DS_Store
+.env
