@@ -44,6 +44,15 @@ class config:
         pathlib.Path(__file__).parent.joinpath("config-files"),
     )
 
+    # Per-query search windows (CLOCK_MONOTONIC start/end, one row per query) written by the
+    # concurrent search workers. Kept beside the result JSON rather than inside it: one row per
+    # query is orders of magnitude more data than a result file should carry, and it is consumed
+    # by joining against external traces on the same clock, not by the frontend.
+    QUERY_TRACE_LOCAL_DIR = env.path(
+        "QUERY_TRACE_LOCAL_DIR",
+        RESULTS_LOCAL_DIR.parent.joinpath("queries"),
+    )
+
     K_DEFAULT = 100  # default return top k nearest neighbors during search
     CUSTOM_CONFIG_DIR = pathlib.Path(__file__).parent.joinpath("custom/custom_case.json")
 

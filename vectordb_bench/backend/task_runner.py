@@ -333,6 +333,8 @@ class CaseRunner(BaseModel):
                 duration=self.config.case_config.concurrency_search_config.concurrency_duration,
                 concurrency_timeout=self.config.case_config.concurrency_search_config.concurrency_timeout,
                 k=self.config.case_config.k,
+                # Names the per-query trace files, so they pair with this run's result JSON.
+                run_id=self.run_id,
             )
 
     def _init_read_write_runner(self):
